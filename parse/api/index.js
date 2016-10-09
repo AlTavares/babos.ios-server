@@ -1,7 +1,7 @@
 
 var ParseServer = require('parse-server').ParseServer;
 var api = new ParseServer({
-  databaseURI: "mongodb://localhost:27017/parse",
+  databaseURI: process.env.MONGODB_URI,
   cloud: __dirname + '/cloud/main.js',
   appId: process.env.appId,
   masterKey: process.env.masterKey, //Add your master key here. Keep it secret!
