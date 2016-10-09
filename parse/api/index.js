@@ -1,11 +1,12 @@
 
 var ParseServer = require('parse-server').ParseServer;
+var port = process.env.PORT || 3000
 var api = new ParseServer({
   databaseURI: process.env.MONGODB_URI,
   cloud: __dirname + '/cloud/main.js',
   appId: process.env.appId,
   masterKey: process.env.masterKey, //Add your master key here. Keep it secret!
-  serverURL: "http://localhost:3000/parse"
+  serverURL: 'http://localhost:' + port + '/parse'
   // liveQuery: {
   //   classNames: [] // List of classes to support for query subscriptions
   // }
