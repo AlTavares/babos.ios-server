@@ -3,9 +3,11 @@ var ParseDashboard = require('parse-dashboard');
 var port = process.env.PORT || 3000
 
 let serverURL = 'http://localhost:' + port + '/parse'
-// if (process.env.NODE_ENV == 'production') {
-//   serverURL = 'https://babosio.herokuapp.com/parse'
-// }
+if (process.env.NODE_ENV == 'production') {
+  console.log('PROD dashboard')
+  serverURL = 'https://babosio.herokuapp.com/parse'
+}
+var allowInsecureHTTP = true
 var dashboard = new ParseDashboard({
   "apps": [
     {
@@ -21,6 +23,6 @@ var dashboard = new ParseDashboard({
       "pass": process.env.password
     }
   ]
-});
+}, allowInsecureHTTP);
 
 module.exports = dashboard
