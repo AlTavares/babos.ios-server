@@ -17,78 +17,78 @@ const IS_PROD = process.env.NODE_ENV !== 'development';
 const NOOP = () => null;
 console.debug(process.env.NODE_ENV)
 let DevTools = IS_PROD ? NOOP : createDevTools(
-  <DockMonitor
-    toggleVisibilityKey="ctrl-h"
-    changePositionKey="ctrl-q"
-    changeMonitorKey="ctrl-m"
-    defaultIsVisible={false}>
-    <LogMonitor />
-    <SliderMonitor />
-    <ChartMonitor />
-  </DockMonitor>
+    <DockMonitor
+        toggleVisibilityKey="ctrl-h"
+        changePositionKey="ctrl-q"
+        changeMonitorKey="ctrl-m"
+        defaultIsVisible={false}>
+        <LogMonitor />
+        <SliderMonitor />
+        <ChartMonitor />
+    </DockMonitor>
 );
 
 const initialEnhancers = IS_PROD ? [] : [
-  DevTools.instrument(),
-  persistState(location.href.match(/[?&]debug_session=([^&]+)\b/))
+    DevTools.instrument(),
+    persistState(location.href.match(/[?&]debug_session=([^&]+)\b/))
 ];
 
 export default (options) => {
-  let {
-    initialState = {},
-    Layout = NOOP,
-    loggerOptions = {},
-    middleware = [],
-    reducers = {},
-    enhancers = {},
-    routes = []
-  } = options;
+    let {
+        initialState = {},
+        Layout = NOOP,
+        loggerOptions = {},
+        middleware = [],
+        reducers = {},
+        enhancers = {},
+        routes = []
+    } = options;
 
-  const frozen = Immutable.fromJS(initialState);
+    const frozen = Immutable.fromJS(initialState);
 
-  const routing = (state = frozen, action) => {
-    return action.type === LOCATION_CHANGE ?
-      state.merge({ locationBeforeTransitions: action.payload }) :
-      state;
-  };
+    const routing = (state = frozen, action) => {
+        return action.type === LOCATION_CHANGE ?
+            state.merge({ locationBeforeTransitions: action.payload }) :
+            state;
+    };
 
-  const initialMiddleware = [createLogger(loggerOptions)];
+    const initialMiddleware = [createLogger(loggerOptions)];
 
-  const store = createStore(
-    combineReducers({ ...reducers, routing }),
+    const store = createStore(
+        combineReducers({ ...reducers, routing }),
 frozen,
-  compose(
-    applyMiddleware(...initialMiddleware, ...middleware),
-    ...initialEnhancers,
-    ...enhancers
-  )
+    compose(
+        applyMiddleware(...initialMiddleware, ...middleware),
+        ...initialEnhancers,
+        ...enhancers
+    )
   );
 
 const history = syncHistoryWithStore(browserHistory, store, {
-  selectLocationState: state => state.has('routing') ? state.get('routing').toJS() : null
+    selectLocationState: state => state.has('routing') ? state.get('routing').toJS() : null
 });
 
 const LayoutWrapper = (props) => (
-  <div id="wrapper">
-    <Layout {...props} />
-    <DevTools />
-  </div>
+    <div id="wrapper">
+        <Layout {...props} />
+        <DevTools />
+    </div>
 );
 
 return {
-  store,
-  history,
-  render(rootElement = document.getElementById('root')) {
-    ReactDOM.render(
-      <Provider store={store}>
-        <Router history={history}>
-          <Route component={LayoutWrapper}>
-            {routes.map(route => <Route key={route.path} path={route.path} component={route.component} />)}
-          </Route>
-        </Router>
-      </Provider>,
-      rootElement
-    );
-  }
+    store,
+    history,
+    render(rootElement = document.getElementById('root')) {
+        ReactDOM.render(
+            <Provider store={store}>
+                <Router history={history}>
+                    <Route component={LayoutWrapper}>
+                        {routes.map(route => <Route key={route.path} path={route.path} component={route.component} />)}
+                    </Route>
+                </Router>
+            </Provider>,
+            rootElement
+        );
+    }
 };
 };

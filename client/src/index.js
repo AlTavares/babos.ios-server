@@ -10,7 +10,7 @@ export const reducers = {
 };
 
 export const initialState = {
-  title: 'babos.io'
+  title: 'WebPlantas'
 };
 
 App({ reducers, initialState, Layout, routes }).render();

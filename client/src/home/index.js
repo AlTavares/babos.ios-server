@@ -1,13 +1,6 @@
 import React from 'react';
-import service from '../services/plants'
 
 class Home extends React.Component {
-
-  componentDidMount() {
-    service.get( plants => 
-      console.debug(plants)
-    )
-  }
 
   render() {
     return (
