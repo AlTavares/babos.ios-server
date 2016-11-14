@@ -1,5 +1,5 @@
 
-import Plants from './plants';
+import Plants from './plants/list';
 import PlantView from './plants/view'
 import PlantEdit from './plants/edit'
 
