@@ -7,16 +7,23 @@ var Plant = Parse.Object.extend("Interaction")
 function Query() {
     return new Parse.Query(Plant)
 }
+var update = true
+var list = []
 
 var Plants = {
 
     get: function (callback) {
+        if(!update) {
+            return callback(list)
+        }
         let query = Query()
         query.find({
             success: function (plants) {
                 // The object was retrieved successfully.
                 console.debug('service', plants)
-                callback(plants.map(obj => obj.toJSON()))
+                list = plants.map(obj => obj.toJSON())
+                update = false
+                callback(list)
             },
             error: function (object, error) {
                 console.debug(object, error)
