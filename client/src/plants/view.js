@@ -1,6 +1,5 @@
 import React from 'react';
 import service from '../services/plants'
-import env from '../services/environment'
 import { Link } from 'react-router'
 
 class Plant extends React.Component {
@@ -8,7 +7,7 @@ class Plant extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            plant: {loading: true}
+            plant: { loading: true }
         }
     }
 
@@ -40,7 +39,8 @@ class Plant extends React.Component {
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Nome</label>
-                                <p>{plant.name[env.lang]}</p>
+                                <MultiLanguageView value={plant.name} />
+                                <Reference plant={plant} property="name" />
                             </div>
                         </div>
 
@@ -48,6 +48,7 @@ class Plant extends React.Component {
                             <div className="form-group col-lg-6">
                                 <label>Nome Científico</label>
                                 <p>{plant.scientificName}</p>
+                                <Reference plant={plant} property="scientificName" />
                             </div>
                         </div>
 
@@ -55,41 +56,39 @@ class Plant extends React.Component {
                             <div className="form-group col-lg-6">
                                 <label>Família</label>
                                 <p>{plant.family}</p>
+                                <Reference plant={plant} property="family" />
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Partes</label>
-                                <p>partes</p>
+                                <MultiLanguageView value={plant.parts} />
+                                <Reference plant={plant} property="parts" />
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Interações</label>
-                                <p>interacoes</p>
+                                <MultiLanguageView value={plant.interactions} />
+                                <Reference plant={plant} property="interactions" />
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Precauções</label>
-                                <p align="justify" >{plant.precautions[env.lang]}</p>
+                                <MultiLanguageView value={plant.precautions} />
+                                <Reference plant={plant} property="precautions" />
+
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Grupo de Interações</label>
-                                <p>grupo</p>
-                            </div>
-                        </div>
-
-                        <div className="col-lg-12">
-                            <div className="form-group col-lg-6">
-                                <label>Referências</label>
-                                <p>referencia</p>
+                                <ArrayList values={plant.interactionGroups} />
                             </div>
                         </div>
 
@@ -114,3 +113,45 @@ Plant.displayName = 'Plant';
 
 
 export default Plant
+
+class MultiLanguageView extends React.Component {
+    render() {
+        var languages = this.props.value
+        var array = []
+        for (var key in languages) {
+            if (languages.hasOwnProperty(key)) {
+                array.push(<li key={key}><b>{key.toUpperCase()}</b>: {languages[key]}</li>)
+            }
+        }
+        return (
+            <ul>
+                {array}
+            </ul>
+        )
+    }
+}
+
+class ArrayList extends React.Component {
+    render() {
+        var array = this.props.values
+        return (
+            <ul>
+                {array.map(value =>
+                    <li key={value}>{value}</li>
+                )}
+            </ul>
+        )
+    }
+}
+
+class Reference extends React.Component {
+    render() {
+        var references = this.props.plant.references[this.props.property]
+        return (
+            <div style={{marginLeft: '20pt'}}>
+                <p>Referências:</p>
+                <ArrayList key="refs" values={references} />
+            </div>
+        )
+    }
+}
