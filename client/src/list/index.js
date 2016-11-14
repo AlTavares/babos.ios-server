@@ -6,8 +6,8 @@ class List extends React.Component {
         return (
             <div id="list" className="row">
 
-                <div className="table-responsive col-md-12">
-                    <table className="table table-striped" cellSpacing="0" cellPadding="0">
+                <div>
+                    <table className="table table-striped">
                         <thead>
                             {this.props.header}
                         </thead>

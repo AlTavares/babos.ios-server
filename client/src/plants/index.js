@@ -3,6 +3,7 @@ import service from '../services/plants'
 import List from '../list'
 import env from '../services/environment'
 import TopBar from '../topBar'
+import { Link } from 'react-router'
 
 class Plants extends React.Component {
 
@@ -22,15 +23,16 @@ class Plants extends React.Component {
   }
 
   body() {
+        console.debug(this.state)
     let plants = this.state.plants
     return plants.map(plant =>
       <tr key={plant.objectId}>
-        <td>{plant.name[env.lang]}</td>
+        <td className="plant-name">{plant.name[env.lang]}</td>
         <td>{plant.scientificName}</td>
         <td>{plant.family}</td>
         <td className="actions">
-          <a className="btn btn-success btn-xs" href="view.html">Visualizar</a>
-          <a className="btn btn-warning btn-xs" href="edit.html">Editar</a>
+          <Link className="btn btn-success btn-xs" to={"/plant/" + plant.objectId}>Visualizar</Link>
+          <Link className="btn btn-warning btn-xs" to={"/plant/" + plant.objectId + "/edit"}>Editar</Link>
           <a className="btn btn-danger btn-xs" href="#" data-toggle="modal" data-target="#delete-modal">Excluir</a>
         </td>
       </tr>
@@ -52,9 +54,9 @@ Plants.displayName = 'Plants';
 
 let header =
   <tr>
-    <th>Nome</th>
-    <th>Nome Científico</th>
-    <th>Família</th>
+    <th className="col-md-4">Nome</th>
+    <th className="col-md-4">Nome Científico</th>
+    <th className="col-md-4">Família</th>
     <th className="actions">Ações</th>
   </tr>
 

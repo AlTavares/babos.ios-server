@@ -1,26 +1,36 @@
 import React from 'react';
 import service from '../services/plants'
 import env from '../services/environment'
+import { Link } from 'react-router'
 
-class Plants extends React.Component {
+class Plant extends React.Component {
 
     constructor(props) {
         super(props)
-        console.debug(this.props.params)
         this.state = {
-            plant: {}
+            plant: {loading: true}
         }
     }
 
     componentDidMount() {
-        service.getPlant(plants =>
+        let id = this.props.params.id
+        console.debug('didMount')
+        service.getPlant(id, plant =>
             this.setState({
-                plants: plants
+                plant: plant
             })
         )
     }
 
     render() {
+        console.debug(this.state)
+        let plant = this.state.plant
+        if (!plant) {
+            return <h2> Item não encontrado </h2>
+        }
+        if (plant.loading) {
+            return <h2> Carregando... </h2>
+        }
         return (
             <div>
                 <div className="container">
@@ -30,62 +40,64 @@ class Plants extends React.Component {
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Nome</label>
-                                <p>{nome}</p>
+                                <p>{plant.name[env.lang]}</p>
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Nome Científico</label>
-                                <p>{nomeCientifico}</p>
+                                <p>{plant.scientificName}</p>
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
-                                <label>Fam�lia</label>
-                                <p>{familia}</p>
+                                <label>Família</label>
+                                <p>{plant.family}</p>
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Partes</label>
-                                <p>{partes}</p>
+                                <p>partes</p>
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
                                 <label>Interações</label>
-                                <p>{interacoes}</p>
+                                <p>interacoes</p>
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
-                                <label>Precau��es</label>
-                                <p>{precaucoes}</p>
+                                <label>Precauções</label>
+                                <p align="justify" >{plant.precautions[env.lang]}</p>
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
-                                <label>Grupo de Intera��es</label>
-                                <p>{grupo}</p>
+                                <label>Grupo de Interações</label>
+                                <p>grupo</p>
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
-                                <label>Refer�ncias</label>
-                                <p>{referencia}</p>
+                                <label>Referências</label>
+                                <p>referencia</p>
                             </div>
                         </div>
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
-                                <input name='Voltar' type='button' className="btn btn-primary" onclick='javascript:history.back();self.location.reload();' value='Voltar' />
+                                <Link to="/plants">
+                                    <input name='Voltar' type='button' className="btn btn-primary" value='Voltar' />
+                                </Link>
                             </div>
                         </div>
 
@@ -93,7 +105,7 @@ class Plants extends React.Component {
                     </form>
                 </div>
 
-            </div>
+            </div >
         );
     }
 }
