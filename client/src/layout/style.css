@@ -12,3 +12,7 @@
 .plant-name {
   font-weight: bold;
 }
+
+.unstyled-list {
+  list-style-type: none;
+}
