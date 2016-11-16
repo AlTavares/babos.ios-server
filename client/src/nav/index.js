@@ -23,6 +23,7 @@ export let Nav = ({ title }) => (
                     }
                     )}
                 </ul>
+                <Link key="login" to="/login" className="btn btn-primary pull-right" style={{ marginTop: '6pt' }}>Login</Link>
             </div>
         </div>
     </nav>
