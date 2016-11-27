@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build": "neo build --config webpack.custom.js",
-    "start": "neo start --port 4000",
+    "client": "neo start --port 4000",
     "test": "neo test"
   },
   "keywords": [],
