@@ -31,9 +31,8 @@ class EditPlant extends React.Component {
             })
             remumeService.getList((error, remumeList) => {
                 if (!error) {
-                    var list = remumeService.listIgnoringGroups(remumeList, plant.interactionGroups)
                     this.setState({
-                        remumeList: list,
+                        remumeList: remumeList,
                     })
                 }
             })
@@ -153,20 +152,19 @@ class EditPlant extends React.Component {
                         <div className="form-group col-lg-6">
                             <label>Grupo de Interações</label>
                             <ul>
-                                {plant.interactionGroups.map((value, index) => 
+                                {plant.interactionGroups.sort(sortInteractions).map((value, index) =>
                                     <li key={value}>{value + ' - ' + remumeService.descriptionForGroup(value)} <button type="button" className="btn btn-link" onClick={() => this.deleteInteractionAtIndex(index)}><span className="glyphicon glyphicon-remove" aria-hidden="true" style={{ color: 'red' }}></span></button></li>
                                 )}
                             </ul>
-                            <div className="form-inline" style={{ marginLeft: '30px' }}>
-                                <input type="text" className="form-control" id='add-interaction' placeholder='Novo grupo' />
-                                <select>
+                            <div style={{ marginLeft: '30px' }}>
+                                <select className="form-control" id='add-interaction'>
                                     {
-                                        this.state.remumeList.map(item =>
+                                        remumeService.listIgnoringGroups(this.state.remumeList, plant.interactionGroups).map(item =>
                                             <option key={item.group} value={item.group}>{item.group + ' - ' + item.description[env.lang]}</option>
                                         )
                                     }
                                 </select>
-                                <button type="button" className="btn btn-primary btn-success" onClick={() => this.addInteractionGroup($('#add-interaction'))}><span className="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                <button type="button" style={{ marginTop: '10px' }} className="btn btn-primary btn-success" onClick={() => this.addInteractionGroup($('#add-interaction'))}><span className="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                             </div>
                         </div>
                     </div>
@@ -195,6 +193,10 @@ class EditPlant extends React.Component {
 }
 
 EditPlant.displayName = 'EditPlant'
+
+var sortInteractions = function (a, b) {
+    return a.localeCompare(b)
+}
 
 export default EditPlant
 
