@@ -1,7 +1,8 @@
 import React from 'react'
+import './style.css'
+
 
 class Loader extends React.Component {
-
     render() {
         if (this.props.active) {
             return <div className='overlay'>
@@ -10,7 +11,6 @@ class Loader extends React.Component {
         }
         return null
     }
-
 }
 
 Loader.displayName = 'Loader';

@@ -6,6 +6,7 @@ import TopBar from '../topBar'
 import { Link } from 'react-router'
 import Modal from '../modal'
 import $ from 'jquery'
+import Loader from '../loader'
 
 class Plants extends React.Component {
 
@@ -17,8 +18,13 @@ class Plants extends React.Component {
   }
 
   componentDidMount() {
+    this.getData()
+  }
+
+  getData() {
     service.get(plants =>
       this.setState({
+        loading: false,
         plants: plants
       })
     )
@@ -30,12 +36,21 @@ class Plants extends React.Component {
       <button type="button" className="btn btn-primary btn-danger" onClick={() => this.deletePlant(plant)}>Sim</button>
       <button type="button" className="btn btn-default" data-dismiss="modal">Não</button>
     </div>
-    var modal = <Modal id='delete-modal' header='Excluir Item.' body={'Tem certeza que deseja excluir ' + plant.name[env.lang]} footer={footer} />
+    var modal = <Modal id='delete-modal' title='Excluir Item.' body={'Tem certeza que deseja excluir ' + plant.name[env.lang]} footer={footer} />
     this.setState({ modal: modal }, () => $("#delete-modal").modal())
   }
 
   deletePlant(plant) {
-    service.delete(plant)
+    this.setState({ loading: true })
+    service.delete(plant, (error, result) => {
+      $("#delete-modal").modal('hide')
+      if (error) {
+        this.setState({ loading: false })
+        alert(error.message)
+        return
+      }
+      this.getData()
+    })
   }
 
   body() {
@@ -59,6 +74,7 @@ class Plants extends React.Component {
     return (
       <div>
         <TopBar title='Plantas' />
+        <Loader active={this.state.loading} />
         <List header={header} body={this.body()} />
         {this.state.modal}
       </div>

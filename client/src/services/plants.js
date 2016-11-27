@@ -17,6 +17,8 @@ var Plants = {
             return callback(list)
         }
         let query = Query()
+        query.ascending('name')
+        query.notEqualTo('deleted', true)
         query.find({
             success: function (plants) {
                 // The object was retrieved successfully.
@@ -50,10 +52,18 @@ var Plants = {
         })
     },
 
-    delete: function (plant) {
+    delete: function (plant, callback) {
         var parsePlant = this.parsePlantFromObject(plant)
         parsePlant.set('deleted', true)
-        parsePlant.save()
+        parsePlant.save(null, {
+            success: function (result) {
+                update = true
+                callback(null, result)
+            },
+            error: function (result, error) {
+                callback(error, null)
+            }
+        });
     },
 
     parsePlantFromObject: function (obj) {
