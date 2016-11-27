@@ -13,7 +13,7 @@ var list = []
 var Plants = {
 
     get: function (callback) {
-        if(!update) {
+        if (!update) {
             return callback(list)
         }
         let query = Query()
@@ -48,7 +48,24 @@ var Plants = {
                 // error is a Parse.Error with an error code and message.
             }
         })
+    },
+
+    delete: function (plant) {
+        var parsePlant = this.parsePlantFromObject(plant)
+        parsePlant.set('deleted', true)
+        parsePlant.save()
+    },
+
+    parsePlantFromObject: function (obj) {
+        var plant = new Plant()
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                plant.set(key, obj[key])
+            }
+        }
+        return plant
     }
+
 }
 
 export default Plants

@@ -29,7 +29,7 @@ class Nav extends React.Component {
             <nav className="navbar navbar-inverse navbar-fixed-top">
                 <div className="container-fluid">
                     <div className="navbar-header">
-                        <a className="navbar-brand" href="#">WebPlantas</a>
+                        <Link className="navbar-brand" key='title' to='/'>WebPlantas</Link>
                     </div>
                     <div id="navbar" className="navbar-collapse collapse">
                         <ul className="nav navbar-nav">

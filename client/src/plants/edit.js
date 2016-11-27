@@ -1,6 +1,7 @@
 import React from 'react';
 import service from '../services/plants'
 import { Link } from 'react-router'
+// import Modal from '../modal'
 
 class EditPlant extends React.Component {
 

@@ -4,6 +4,8 @@ import List from '../list'
 import env from '../services/environment'
 import TopBar from '../topBar'
 import { Link } from 'react-router'
+import Modal from '../modal'
+import $ from 'jquery'
 
 class Plants extends React.Component {
 
@@ -22,8 +24,22 @@ class Plants extends React.Component {
     )
   }
 
+  handleDelete(plant) {
+    console.debug('delete', plant)
+    var footer = <div>
+      <button type="button" className="btn btn-primary btn-danger" onClick={() => this.deletePlant(plant)}>Sim</button>
+      <button type="button" className="btn btn-default" data-dismiss="modal">Não</button>
+    </div>
+    var modal = <Modal id='delete-modal' header='Excluir Item.' body={'Tem certeza que deseja excluir ' + plant.name[env.lang]} footer={footer} />
+    this.setState({ modal: modal }, () => $("#delete-modal").modal())
+  }
+
+  deletePlant(plant) {
+    service.delete(plant)
+  }
+
   body() {
-        console.debug(this.state)
+    console.debug(this.state)
     let plants = this.state.plants
     return plants.map(plant =>
       <tr key={plant.objectId}>
@@ -33,11 +49,10 @@ class Plants extends React.Component {
         <td className="actions">
           <Link className="btn btn-success btn-xs" to={"/plant/" + plant.objectId}>Visualizar</Link>
           <Link className="btn btn-warning btn-xs" to={"/plant/" + plant.objectId + "/edit"}>Editar</Link>
-          <a className="btn btn-danger btn-xs" href="#" data-toggle="modal" data-target="#delete-modal">Excluir</a>
+          <button className="btn btn-danger btn-xs" onClick={() => { this.handleDelete(plant) } }>Excluir</button>
         </td>
       </tr>
     )
-
   }
 
   render() {
@@ -45,6 +60,7 @@ class Plants extends React.Component {
       <div>
         <TopBar title='Plantas' />
         <List header={header} body={this.body()} />
+        {this.state.modal}
       </div>
     );
   }
