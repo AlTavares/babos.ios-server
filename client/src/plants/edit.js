@@ -44,6 +44,11 @@ class EditPlant extends React.Component {
         console.debug(this.plant)
         console.log('The link was clicked.')
         this.setState({ loading: true })
+        var fileUploadControl = $("#image")[0];
+        if (fileUploadControl.files.length > 0) {
+            var file = fileUploadControl.files[0];
+            this.plant.image = file
+        }
         service.update(this.plant, (error, result) => {
             this.setState({ loading: false })
             if (error) {
@@ -171,8 +176,10 @@ class EditPlant extends React.Component {
 
                     <div className="col-lg-12">
                         <div className="form-group col-lg-6">
-                            <label>Referências</label>
-                            <input type="text" className="form-control" id="referencia" />
+                            <label>Imagem</label>
+                            <br/>
+                            <img className='plant-image-edit' src={plant.image ? plant.image.url : 'http://placehold.it/200.jpg'} />
+                            <input type="file" id="image" accept="image/*" />
                         </div>
                     </div>
 

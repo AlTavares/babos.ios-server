@@ -54,20 +54,30 @@ var Plants = {
 
     update: function (plant, callback) {
         var parsePlant = this.parsePlantFromObject(plant)
-        parsePlant.save(null, {
-            success: function (result) {
-                update = true
-                callback(null, result)
-            },
-            error: function (result, error) {
-                callback(error, null)
-            }
+        if (!plant.image) {
+            this.saveParsePlant(parsePlant, callback)
+            return
+        }
+        var parseFile = new Parse.File(plant.image.name, plant.image);
+        parseFile.save().then(() => {
+            console.debug('FUUUUUUARRRRK')
+            parsePlant.set('image', parseFile)
+            this.saveParsePlant(parsePlant, callback)
+        }, function (error) {
+            callback(error, null)
         });
+
+
     },
 
     delete: function (plant, callback) {
         var parsePlant = this.parsePlantFromObject(plant)
         parsePlant.set('deleted', true)
+        this.saveParsePlant(parsePlant, callback)
+    },
+
+    saveParsePlant: function (parsePlant, callback) {
+        console.debug('CALLLBACURURURU')
         parsePlant.save(null, {
             success: function (result) {
                 update = true
@@ -76,13 +86,13 @@ var Plants = {
             error: function (result, error) {
                 callback(error, null)
             }
-        });
+        })
     },
 
     parsePlantFromObject: function (obj) {
         var plant = new Plant()
         plant.id = obj.objectId
-        var ignore = ['objectId', 'createdAt', 'updatedAt']
+        var ignore = ['objectId', 'createdAt', 'updatedAt', 'image']
         for (var key in obj) {
             if (obj.hasOwnProperty(key) && ignore.indexOf(key) == -1) {
                 plant.set(key, obj[key])

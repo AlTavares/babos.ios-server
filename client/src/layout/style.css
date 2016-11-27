@@ -16,3 +16,11 @@
 .unstyled-list {
   list-style-type: none;
 }
+
+.plant-image {
+  width: 200px
+}
+
+.plant-image-edit {
+  width: 400px
+}

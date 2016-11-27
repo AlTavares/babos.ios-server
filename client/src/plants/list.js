@@ -59,13 +59,14 @@ class Plants extends React.Component {
     let plants = this.state.plants
     return plants.map(plant =>
       <tr key={plant.objectId}>
+        <td><img className='plant-image' src={plant.image ? plant.image.url : 'http://placehold.it/200.jpg'} /></td>
         <td className="plant-name">{plant.name[env.lang]}</td>
         <td>{plant.scientificName}</td>
         <td>{plant.family}</td>
         <td className="actions">
-          <Link className="btn btn-success btn-xs" to={"/plant/" + plant.objectId}>Visualizar</Link>
-          <Link className="btn btn-warning btn-xs" to={"/plant/" + plant.objectId + "/edit"}>Editar</Link>
-          <button className="btn btn-danger btn-xs" onClick={() => { this.handleDelete(plant) } }>Excluir</button>
+          <Link className="btn btn-success" to={"/plant/" + plant.objectId}>Visualizar</Link>
+          <Link className="btn btn-warning" to={"/plant/" + plant.objectId + "/edit"}>Editar</Link>
+          <button className="btn btn-danger" onClick={() => { this.handleDelete(plant) } }>Excluir</button>
         </td>
       </tr>
     )
@@ -87,9 +88,10 @@ Plants.displayName = 'Plants';
 
 let header =
   <tr>
-    <th className="col-md-4">Nome</th>
+    <th className="col-md-1">Imagem</th>  
+    <th className="col-md-2">Nome</th>
     <th className="col-md-4">Nome Científico</th>
-    <th className="col-md-4">Família</th>
+    <th className="col-md-2">Família</th>
     <th className="actions">Ações</th>
   </tr>
 
