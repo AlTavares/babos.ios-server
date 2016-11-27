@@ -1,7 +1,10 @@
 import React from 'react';
 import service from '../services/plants'
 import { Link } from 'react-router'
-// import Modal from '../modal'
+import Modal from '../components/modal'
+import ArrayList from '../components/array-list'
+import $ from 'jquery'
+import Textarea from 'react-textarea-autosize';
 
 class EditPlant extends React.Component {
 
@@ -42,6 +45,27 @@ class EditPlant extends React.Component {
         console.debug(this.plant)
     }
 
+    addInteractionGroup(input) {
+        this.plant.interactionGroups.push(input.val())
+        input.val('')
+        input.focus()
+        this.forceUpdate()
+    }
+
+    openInteractionModal() {
+        var id = 'newInteractionGroup'
+        var footer = <div>
+            <button type="button" className="btn btn-primary btn-success" onClick={() => this.addInteractionGroup($('#' + id).val())}>Adicionar</button>
+            <button type="button" className="btn btn-default" data-dismiss="modal">Cancelar</button>
+        </div>
+        var body = <div>
+            <label>Grupo</label>
+            <input type="text" className="form-control" id={id} />
+        </div>
+        var modal = <Modal id='addInteractionGroup-modal' title='Adicionar Grupo' body={body} footer={footer} />
+        this.setState({ modal: modal }, () => $("#addInteractionGroup-modal").modal())
+    }
+
     render() {
         console.debug(this.state)
         let plant = this.state.plant
@@ -53,6 +77,7 @@ class EditPlant extends React.Component {
         }
         return (
             <div className="container">
+                {this.state.modal}
                 <form id="plantasForm">
                     <h3>Editar Planta</h3>
 
@@ -66,7 +91,7 @@ class EditPlant extends React.Component {
                     <div className="col-lg-12">
                         <div className="form-group col-lg-6">
                             <label>Nome Científico</label>
-                            <input type="text" className="form-control" id="scientificName" defaultValue={plant.scientificName} onChange={this.handleChange} />
+                            <Textarea type="text" className="form-control" id="scientificName" defaultValue={plant.scientificName} onChange={this.handleChange} ></Textarea>
                         </div>
                     </div>
 
@@ -100,8 +125,12 @@ class EditPlant extends React.Component {
 
                     <div className="col-lg-12">
                         <div className="form-group col-lg-6">
-                            <label>Grupo de Interações(separado por virgulas)</label>
-                            <input type="text" className="form-control" id="interactionGroups" defaultValue={plant.interactionGroups.join(', ')} onChange={this.handleChange} />
+                            <label>Grupo de Interações</label>
+                            <ArrayList values={plant.interactionGroups} />
+                            <div className="form-inline" style={{ marginLeft: '30px' }}>
+                                <input type="text" className="form-control" id='add-interaction' placeholder='Novo grupo' />
+                                <button type="button" className="btn btn-primary btn-success" onClick={() => this.addInteractionGroup($('#add-interaction'))}><span className="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                            </div>
                         </div>
                     </div>
 
@@ -114,7 +143,7 @@ class EditPlant extends React.Component {
 
                     <div className="col-lg-12">
                         <div className="form-group col-lg-6">
-                            <button className="btn btn-primary" onClick={this.handleSave}>Atualizar</button>
+                            <button className="btn btn-success" onClick={this.handleSave}>Atualizar</button>
                             <Link to="/plants">
                                 <input name='Voltar' type='button' className="btn btn-primary" value='Voltar' style={{ float: 'right' }} />
                             </Link>
@@ -138,23 +167,47 @@ class MultiLanguageEdit extends React.Component {
         var plant = this.props.plant
         var prop = this.props.prop
         var handleChange = this.props.onChange
+        var props = [
+            {
+                label: 'Português',
+                prop: 'pt'
+            },
+            {
+                label: 'Inglês',
+                prop: 'en'
+            },
+            {
+                label: 'Espanhol',
+                prop: 'es'
+            }
+        ]
+        var content = []
+        for (var i = 0; i < props.length; i++) {
+            var item = props[i];
+            var input
+            var defaultValue = plant[prop][item.prop]
+            var id = prop + '.' + item.prop
+            if (this.props.input) {
+                input = <input type="text" className="form-control" id={id} defaultValue={defaultValue} onChange={handleChange} />
+            }
+            else {
+                input = <Textarea className="form-control" id={id} defaultValue={defaultValue} onChange={handleChange}></Textarea>
+            }
+            content.push(
+                <li key={id}>
+                    <label>{item.label}:</label>
+                    {input}
+                </li>
+            )
+        }
+
         return (
             <div>
                 <ul className="unstyled-list">
-                    <li>
-                        <label>Português:</label>
-                        <input type="text" className="form-control" id={prop + '.pt'} defaultValue={plant[prop].pt} onChange={handleChange} />
-                    </li>
-                    <li>
-                        <label>Inglês:</label>
-                        <input type="text" className="form-control" id={prop + '.en'} defaultValue={plant[prop].en} onChange={handleChange} />
-                    </li>
-                    <li>
-                        <label>Espanhol:</label>
-                        <input type="text" className="form-control" id={prop + '.es'} defaultValue={plant[prop].es} onChange={handleChange} />
-                    </li>
+                    {content}
                 </ul>
             </div>
         )
     }
 }
+

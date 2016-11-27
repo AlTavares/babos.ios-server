@@ -4,9 +4,9 @@ import List from '../list'
 import env from '../services/environment'
 import TopBar from '../topBar'
 import { Link } from 'react-router'
-import Modal from '../modal'
+import Modal from '../components/modal'
 import $ from 'jquery'
-import Loader from '../loader'
+import Loader from '../components/loader'
 
 class Plants extends React.Component {
 
@@ -36,7 +36,7 @@ class Plants extends React.Component {
       <button type="button" className="btn btn-primary btn-danger" onClick={() => this.deletePlant(plant)}>Sim</button>
       <button type="button" className="btn btn-default" data-dismiss="modal">Não</button>
     </div>
-    var modal = <Modal id='delete-modal' title='Excluir Item.' body={'Tem certeza que deseja excluir ' + plant.name[env.lang]} footer={footer} />
+    var modal = <Modal id='delete-modal' title='Excluir Item' body={'Tem certeza que deseja excluir ' + plant.name[env.lang] + '?'} footer={footer} />
     this.setState({ modal: modal }, () => $("#delete-modal").modal())
   }
 
@@ -49,6 +49,7 @@ class Plants extends React.Component {
         alert(error.message)
         return
       }
+      console.debug(result)
       this.getData()
     })
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import service from '../services/plants'
 import { Link } from 'react-router'
+import ArrayList from '../components/array-list'
 
 class Plant extends React.Component {
 
@@ -126,19 +127,6 @@ class MultiLanguageView extends React.Component {
         return (
             <ul>
                 {array}
-            </ul>
-        )
-    }
-}
-
-class ArrayList extends React.Component {
-    render() {
-        var array = this.props.values
-        return (
-            <ul>
-                {array.map(value =>
-                    <li key={value}>{value}</li>
-                )}
             </ul>
         )
     }

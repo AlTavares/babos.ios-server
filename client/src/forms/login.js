@@ -1,6 +1,6 @@
 import React from 'react'
 import UserService from '../services/user'
-import Loader from '../loader'
+import Loader from '../components/loader'
 
 import './form.scss';
 
