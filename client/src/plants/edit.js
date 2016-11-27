@@ -2,7 +2,6 @@ import React from 'react';
 import service from '../services/plants'
 import { Link } from 'react-router'
 import Modal from '../components/modal'
-import ArrayList from '../components/array-list'
 import $ from 'jquery'
 import Textarea from 'react-textarea-autosize';
 
@@ -66,6 +65,11 @@ class EditPlant extends React.Component {
         this.setState({ modal: modal }, () => $("#addInteractionGroup-modal").modal())
     }
 
+    deleteInteractionAtIndex(index) {
+        this.plant.interactionGroups.splice(index, 1)
+        this.forceUpdate()
+    }
+
     render() {
         console.debug(this.state)
         let plant = this.state.plant
@@ -126,7 +130,11 @@ class EditPlant extends React.Component {
                     <div className="col-lg-12">
                         <div className="form-group col-lg-6">
                             <label>Grupo de Interações</label>
-                            <ArrayList values={plant.interactionGroups} />
+                            <ul>
+                                {plant.interactionGroups.map((value, index) =>
+                                    <li key={value}>{value} <button type="button" className="btn btn-link" onClick={() => this.deleteInteractionAtIndex(index)}><span className="glyphicon glyphicon-remove" aria-hidden="true" style={{ color: 'red' }}></span></button></li>
+                                )}
+                            </ul>
                             <div className="form-inline" style={{ marginLeft: '30px' }}>
                                 <input type="text" className="form-control" id='add-interaction' placeholder='Novo grupo' />
                                 <button type="button" className="btn btn-primary btn-success" onClick={() => this.addInteractionGroup($('#add-interaction'))}><span className="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
