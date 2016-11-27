@@ -23,7 +23,7 @@ app.use('/dashboard', dashboard);
 // require('./sockets/sockets.js')(app.io)
 
 // Serve static assets from the /public folder
-app.use('/', express.static(path.join(__dirname, '/client/build')));
+app.use('/', express.static(path.join(__dirname, '/build')));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
