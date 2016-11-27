@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "config": {
-    "entry": "./client/src/index.js"
+    "entry": "./client/src/index.js",
+    "html": {
+      "title": "WebPlantas",
+      "description": "Web Plantas",
+      "author": "Alexandre Tavares"
+    }
   },
   "scripts": {
     "build": "neo build --config ./client/webpack.custom.js",
