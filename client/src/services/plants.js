@@ -52,6 +52,19 @@ var Plants = {
         })
     },
 
+    update: function (plant, callback) {
+        var parsePlant = this.parsePlantFromObject(plant)
+        parsePlant.save(null, {
+            success: function (result) {
+                update = true
+                callback(null, result)
+            },
+            error: function (result, error) {
+                callback(error, null)
+            }
+        });
+    },
+
     delete: function (plant, callback) {
         var parsePlant = this.parsePlantFromObject(plant)
         parsePlant.set('deleted', true)
@@ -68,8 +81,10 @@ var Plants = {
 
     parsePlantFromObject: function (obj) {
         var plant = new Plant()
+        plant.id = obj.objectId
+        var ignore = ['objectId', 'createdAt', 'updatedAt']
         for (var key in obj) {
-            if (obj.hasOwnProperty(key)) {
+            if (obj.hasOwnProperty(key) && ignore.indexOf(key) == -1) {
                 plant.set(key, obj[key])
             }
         }

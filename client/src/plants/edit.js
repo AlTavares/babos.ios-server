@@ -1,20 +1,24 @@
-import React from 'react';
+import React from 'react'
 import service from '../services/plants'
 import { Link } from 'react-router'
 import Modal from '../components/modal'
 import $ from 'jquery'
-import Textarea from 'react-textarea-autosize';
+import Textarea from 'react-textarea-autosize'
+import Loader from '../components/loader'
+import remumeService from '../services/remume'
+import env from '../services/environment'
 
 class EditPlant extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            plant: { loading: true }
+            plant: { loading: true },
+            remumeList: []
         }
         this.plant = {}
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSave = this.handleSave.bind(this);
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSave = this.handleSave.bind(this)
     }
 
     componentDidMount() {
@@ -25,14 +29,31 @@ class EditPlant extends React.Component {
             this.setState({
                 plant: plant
             })
-        }
-        )
+            remumeService.getList((error, remumeList) => {
+                if (!error) {
+                    var list = remumeService.listIgnoringGroups(remumeList, plant.interactionGroups)
+                    this.setState({
+                        remumeList: list,
+                    })
+                }
+            })
+        })
     }
 
     handleSave(e) {
         e.preventDefault()
-        console.debug(this.state.plant)
-        console.log('The link was clicked.');
+        console.debug(this.plant)
+        console.log('The link was clicked.')
+        this.setState({ loading: true })
+        service.update(this.plant, (error, result) => {
+            this.setState({ loading: false })
+            if (error) {
+                alert(error.message)
+                return
+            }
+            console.debug(result)
+            alert('Alterações salvas com sucesso!')
+        })
     }
 
     handleChange(event) {
@@ -81,6 +102,7 @@ class EditPlant extends React.Component {
         }
         return (
             <div className="container">
+                <Loader active={this.state.loading} />
                 {this.state.modal}
                 <form id="plantasForm">
                     <h3>Editar Planta</h3>
@@ -131,12 +153,19 @@ class EditPlant extends React.Component {
                         <div className="form-group col-lg-6">
                             <label>Grupo de Interações</label>
                             <ul>
-                                {plant.interactionGroups.map((value, index) =>
-                                    <li key={value}>{value} <button type="button" className="btn btn-link" onClick={() => this.deleteInteractionAtIndex(index)}><span className="glyphicon glyphicon-remove" aria-hidden="true" style={{ color: 'red' }}></span></button></li>
+                                {plant.interactionGroups.map((value, index) => 
+                                    <li key={value}>{value + ' - ' + remumeService.descriptionForGroup(value)} <button type="button" className="btn btn-link" onClick={() => this.deleteInteractionAtIndex(index)}><span className="glyphicon glyphicon-remove" aria-hidden="true" style={{ color: 'red' }}></span></button></li>
                                 )}
                             </ul>
                             <div className="form-inline" style={{ marginLeft: '30px' }}>
                                 <input type="text" className="form-control" id='add-interaction' placeholder='Novo grupo' />
+                                <select>
+                                    {
+                                        this.state.remumeList.map(item =>
+                                            <option key={item.group} value={item.group}>{item.group + ' - ' + item.description[env.lang]}</option>
+                                        )
+                                    }
+                                </select>
                                 <button type="button" className="btn btn-primary btn-success" onClick={() => this.addInteractionGroup($('#add-interaction'))}><span className="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                             </div>
                         </div>
@@ -165,8 +194,7 @@ class EditPlant extends React.Component {
     }
 }
 
-EditPlant.displayName = 'EditPlant';
-
+EditPlant.displayName = 'EditPlant'
 
 export default EditPlant
 
@@ -191,7 +219,7 @@ class MultiLanguageEdit extends React.Component {
         ]
         var content = []
         for (var i = 0; i < props.length; i++) {
-            var item = props[i];
+            var item = props[i]
             var input
             var defaultValue = plant[prop][item.prop]
             var id = prop + '.' + item.prop
