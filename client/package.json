@@ -16,13 +16,13 @@
     }
   },
   "scripts": {
-    "build": "neo build",
+    "build": "neo build --config webpack.custom.js",
     "start": "neo start --port 4000",
     "test": "neo test"
   },
   "keywords": [],
   "devDependencies": {
-    "mozilla-neo": "2.5.0"
+    "mozilla-neo": "2.7.0"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
