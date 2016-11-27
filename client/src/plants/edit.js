@@ -16,25 +16,28 @@ class EditPlant extends React.Component {
             plant: { loading: true },
             remumeList: []
         }
-        this.plant = {}
+        this.plant = service.newPlant()
         this.handleChange = this.handleChange.bind(this)
         this.handleSave = this.handleSave.bind(this)
     }
 
     componentDidMount() {
+        remumeService.getList((error, remumeList) => {
+            if (!error) {
+                this.setState({
+                    remumeList: remumeList,
+                })
+            }
+        })
         let id = this.props.params.id
-        console.debug('didMount')
+        if (id == 'new') {
+            this.setState({ plant: service.newPlant() })
+            return
+        }
         service.getPlant(id, plant => {
             this.plant = plant
             this.setState({
                 plant: plant
-            })
-            remumeService.getList((error, remumeList) => {
-                if (!error) {
-                    this.setState({
-                        remumeList: remumeList,
-                    })
-                }
             })
         })
     }
@@ -72,8 +75,7 @@ class EditPlant extends React.Component {
     addInteractionGroup(input) {
         this.plant.interactionGroups.push(input.val())
         input.val('')
-        input.focus()
-        this.forceUpdate()
+        this.setState({plant: this.plant})
     }
 
     openInteractionModal() {
@@ -177,8 +179,8 @@ class EditPlant extends React.Component {
                     <div className="col-lg-12">
                         <div className="form-group col-lg-6">
                             <label>Imagem</label>
-                            <br/>
-                            <img className='plant-image-edit' src={plant.image ? plant.image.url : 'http://placehold.it/200.jpg'} />
+                            <br />
+                            <img className='plant-image-edit' src={plant.image ? plant.image.url : 'https://placehold.it/400.jpg'} />
                             <input type="file" id="image" accept="image/*" />
                         </div>
                     </div>
@@ -201,7 +203,7 @@ class EditPlant extends React.Component {
 
 EditPlant.displayName = 'EditPlant'
 
-var sortInteractions = function (a, b) {
+var sortInteractions = function(a, b) {
     return a.localeCompare(b)
 }
 

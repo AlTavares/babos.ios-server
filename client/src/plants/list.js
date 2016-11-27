@@ -59,13 +59,13 @@ class Plants extends React.Component {
     let plants = this.state.plants
     return plants.map(plant =>
       <tr key={plant.objectId}>
-        <td><img className='plant-image' src={plant.image ? plant.image.url : 'http://placehold.it/200.jpg'} /></td>
+        <td><img className='plant-image' src={plant.image ? plant.image.url : 'https://placehold.it/200x150.jpg'} /></td>
         <td className="plant-name">{plant.name[env.lang]}</td>
         <td>{plant.scientificName}</td>
         <td>{plant.family}</td>
         <td className="actions">
-          <Link className="btn btn-success" to={"/plant/" + plant.objectId}>Visualizar</Link>
-          <Link className="btn btn-warning" to={"/plant/" + plant.objectId + "/edit"}>Editar</Link>
+          <Link className="btn btn-success" to={"/plant/view/" + plant.objectId}>Visualizar</Link>
+          <Link className="btn btn-warning" to={"/plant/edit/" + plant.objectId}>Editar</Link>
           <button className="btn btn-danger" onClick={() => { this.handleDelete(plant) } }>Excluir</button>
         </td>
       </tr>

@@ -12,7 +12,7 @@ var list = []
 
 var Plants = {
 
-    get: function (callback) {
+    get: function(callback) {
         if (!update) {
             return callback(list)
         }
@@ -20,14 +20,14 @@ var Plants = {
         query.ascending('name')
         query.notEqualTo('deleted', true)
         query.find({
-            success: function (plants) {
+            success: function(plants) {
                 // The object was retrieved successfully.
                 console.debug('service', plants)
                 list = plants.map(obj => obj.toJSON())
                 update = false
                 callback(list)
             },
-            error: function (object, error) {
+            error: function(object, error) {
                 console.debug(object, error)
                 callback(null)
                 // The object was not retrieved successfully.
@@ -36,14 +36,14 @@ var Plants = {
         })
     },
 
-    getPlant: function (id, callback) {
+    getPlant: function(id, callback) {
         let query = Query()
         query.get(id, {
-            success: function (plant) {
+            success: function(plant) {
                 // The object was retrieved successfully.
                 callback(plant.toJSON())
             },
-            error: function (object, error) {
+            error: function(object, error) {
                 console.debug(object, error)
                 callback(null)
                 // The object was not retrieved successfully.
@@ -52,7 +52,20 @@ var Plants = {
         })
     },
 
-    update: function (plant, callback) {
+    newPlant: () => {
+        var plant = {}
+        plant.interactionGroups = []
+        plant.name = {}
+        plant.scientificName = ''
+        plant.family = ''
+        plant.parts = {}
+        plant.interactions = {}
+        plant.precautions = {}
+        plant.references = {}
+        return plant
+    },
+
+    update: function(plant, callback) {
         var parsePlant = this.parsePlantFromObject(plant)
         if (!plant.image) {
             this.saveParsePlant(parsePlant, callback)
@@ -60,36 +73,34 @@ var Plants = {
         }
         var parseFile = new Parse.File(plant.image.name, plant.image);
         parseFile.save().then(() => {
-            console.debug('FUUUUUUARRRRK')
             parsePlant.set('image', parseFile)
             this.saveParsePlant(parsePlant, callback)
-        }, function (error) {
+        }, function(error) {
             callback(error, null)
         });
 
 
     },
 
-    delete: function (plant, callback) {
+    delete: function(plant, callback) {
         var parsePlant = this.parsePlantFromObject(plant)
         parsePlant.set('deleted', true)
         this.saveParsePlant(parsePlant, callback)
     },
 
-    saveParsePlant: function (parsePlant, callback) {
-        console.debug('CALLLBACURURURU')
+    saveParsePlant: function(parsePlant, callback) {
         parsePlant.save(null, {
-            success: function (result) {
+            success: function(result) {
                 update = true
                 callback(null, result)
             },
-            error: function (result, error) {
+            error: function(result, error) {
                 callback(error, null)
             }
         })
     },
 
-    parsePlantFromObject: function (obj) {
+    parsePlantFromObject: function(obj) {
         var plant = new Plant()
         plant.id = obj.objectId
         var ignore = ['objectId', 'createdAt', 'updatedAt', 'image']

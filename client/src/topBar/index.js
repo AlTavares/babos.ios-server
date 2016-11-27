@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router'
 
 class TopBar extends React.Component {
 
@@ -20,7 +21,7 @@ class TopBar extends React.Component {
 					</div>
 					*/}
 					<div className="col-sm-3">
-						<a href="add.html" className="btn btn-primary pull-right h2">Cadastrar</a>
+						<Link to='/plant/new' className="btn btn-primary pull-right h2">Cadastrar</Link>
 					</div>
 
 				</div>

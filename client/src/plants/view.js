@@ -92,6 +92,14 @@ class Plant extends React.Component {
                                 <ArrayList values={plant.interactionGroups} />
                             </div>
                         </div>
+                        <div className="col-lg-12">
+                            <div className="form-group col-lg-6">
+                                <label>Imagem</label>
+                                <br />
+                                <img className='plant-image-edit' src={plant.image ? plant.image.url : 'https://placehold.it/400.jpg'} />
+                            </div>
+                        </div>
+
 
                         <div className="col-lg-12">
                             <div className="form-group col-lg-6">
@@ -136,7 +144,7 @@ class Reference extends React.Component {
     render() {
         var references = this.props.plant.references[this.props.property]
         return (
-            <div style={{marginLeft: '20pt'}}>
+            <div style={{ marginLeft: '20pt' }}>
                 <p>Referências:</p>
                 <ArrayList key="refs" values={references} />
             </div>
