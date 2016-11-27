@@ -1,0 +1,18 @@
+
+#main {
+  margin-top: 50px;
+}
+
+.actions .btn {
+  width: 70pt;
+  margin: 4pt;
+  display: inline-block;
+}
+
+.plant-name {
+  font-weight: bold;
+}
+
+.unstyled-list {
+  list-style-type: none;
+}
