@@ -18,7 +18,6 @@ var User = {
             },
             error: function (user, error) {
                 // Show the error message somewhere and let the user try again.
-                alert("Error: " + error.code + " " + error.message)
                 callback(error, null)
             }
         })
@@ -32,14 +31,24 @@ var User = {
             },
             error: function (user, error) {
                 // The login failed. Check error to see why.
-                callback(error, user)
+                callback(error, null)
             }
         })
     },
 
-    logout: Parse.User.logOut,
+    logout: function () { return Parse.User.logOut() },
 
-    current: Parse.User.current
+    current: function () { return Parse.User.current() },
+
+    isLogged: function () { return this.current() != null },
+
+    getName: function () { 
+        var user = this.current()
+        if(user) {
+            return user.get('name')
+        }
+        return ''
+    }
 
 }
 

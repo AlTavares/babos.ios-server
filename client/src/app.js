@@ -12,6 +12,9 @@ import { Router, Route, browserHistory } from 'react-router';
 import { combineReducers } from 'redux-immutable';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { createDevTools, persistState } from 'redux-devtools';
+import environment from './services/environment'
+
+environment.setup()
 
 const IS_PROD = process.env.NODE_ENV !== 'development';
 const NOOP = () => null;

@@ -1,9 +1,6 @@
 import App from './app';
 import routes from './routes';
 import Layout from './layout';
-import environment from './services/environment'
-
-environment.setup()
 
 export const reducers = {
   title: state => state
