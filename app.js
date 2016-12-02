@@ -9,6 +9,9 @@ var routes = require('./routes/index');
 var app = express();
 
 // Serve the Parse API on the /parse URL prefix
+
+app.use('/*', express.static(path.join(__dirname, '/build')));
+
 var parse = require('./parse/api')
 app.use('/parse', parse);
 app.ParseServer = parse
@@ -21,9 +24,6 @@ app.use('/dashboard', dashboard);
 // uncomment if you want to use it
 // app.io = require('socket.io')()
 // require('./sockets/sockets.js')(app.io)
-
-// Serve static assets from the /public folder
-app.use('/', express.static(path.join(__dirname, '/build')));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
