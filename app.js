@@ -8,10 +8,10 @@ var routes = require('./routes/index');
 
 var app = express();
 
+// Serve the Public files
+app.use(['/', '/plant*'], express.static(path.join(__dirname, '/build')));
+
 // Serve the Parse API on the /parse URL prefix
-
-app.use('/*', express.static(path.join(__dirname, '/build')));
-
 var parse = require('./parse/api')
 app.use('/parse', parse);
 app.ParseServer = parse
